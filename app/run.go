@@ -1,7 +1,6 @@
 package app
 
 import (
-	"github.com/ProgrammingLab/toshokan/app/server"
 	"github.com/izumin5210/grapi/pkg/grapiserver"
 )
 
@@ -10,8 +9,7 @@ func Run() error {
 	s := grapiserver.New(
 		grapiserver.WithDefaultLogger(),
 		grapiserver.WithServers(
-			server.NewUserServiceServer(),
-			server.NewSessionServiceServer(),
+		// TODO
 		),
 	)
 	return s.Serve()

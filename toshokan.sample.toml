@@ -1,3 +1,4 @@
+adminEmail = "admin@kurume-nct.com"
 debug = true
 
 [DB]

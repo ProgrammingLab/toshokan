@@ -7,8 +7,9 @@ import (
 )
 
 type Config struct {
-	Debug bool     `toml:"debug"`
-	DB    DBConfig `toml:"DB"`
+	Debug      bool     `toml:"debug"`
+	AdminEmail string   `toml:"adminEmail"`
+	DB         DBConfig `toml:"DB"`
 }
 
 type DBConfig struct {

@@ -1,0 +1,86 @@
+swagger: "2.0"
+consumes:
+- application/json
+info:
+  description: プロラボの図書館理システムです。
+  title: プロラボ図書館
+  version: 1.0.0
+paths:
+  /sessions:
+    post:
+      summary: ログイン
+      tags:
+        - sessions
+      description: メールアドレスとパスワードでログインする。
+      consumes:
+        - application/json
+      parameters:
+        - in: body
+          name: email and password
+          description: メールアドレスとパスワード
+          required: true
+          schema:
+            $ref: "#/definitions/EmailAndPassword"
+      responses:
+        201:
+          description: Created
+          schema:
+            type: "object"
+            properties:
+              token:
+                type: "string"
+                example: "1234_abcdefghijklmn"
+              user:
+                $ref: "#/definitions/User"
+
+        401:
+          description: Unauthorized
+    
+    delete:
+      summary: ログアウト
+      tags:
+        - sessions
+      description: ログアウトする。
+      responses:
+        204:
+          description: No Content
+        401:
+          description: Unauthorized
+
+
+tags:
+  - name: sessions
+    description: ログインとログアウト
+
+definitions:
+  EmailAndPassword:
+    type: "object"
+    required:
+      - email
+      - password
+    properties:
+      email:
+        type: "string"
+        example: "hoge@example.com"
+      password:
+        type: "string"
+  User:
+    type: "object"
+    properties:
+      userID:
+        type: "integer" 
+        format: "int32"
+      name:
+        type: "string"
+      displayName:
+        type: "string"
+        example: "あいうえお"
+      email:
+        type: "string"
+        example: "hoge@example.com"
+      isAdmin:
+        type: "boolean"
+produces:
+- application/json
+schemes:
+- https

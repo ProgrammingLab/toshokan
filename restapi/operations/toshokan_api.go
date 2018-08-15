@@ -39,11 +39,11 @@ func NewToshokanAPI(spec *loads.Document) *ToshokanAPI {
 		BearerAuthenticator: security.BearerAuth,
 		JSONConsumer:        runtime.JSONConsumer(),
 		JSONProducer:        runtime.JSONProducer(),
-		SessionsDeleteSessionsHandler: sessions.DeleteSessionsHandlerFunc(func(params sessions.DeleteSessionsParams) middleware.Responder {
-			return middleware.NotImplemented("operation SessionsDeleteSessions has not yet been implemented")
+		SessionsLoginHandler: sessions.LoginHandlerFunc(func(params sessions.LoginParams) middleware.Responder {
+			return middleware.NotImplemented("operation SessionsLogin has not yet been implemented")
 		}),
-		SessionsPostSessionsHandler: sessions.PostSessionsHandlerFunc(func(params sessions.PostSessionsParams) middleware.Responder {
-			return middleware.NotImplemented("operation SessionsPostSessions has not yet been implemented")
+		SessionsLogoutHandler: sessions.LogoutHandlerFunc(func(params sessions.LogoutParams) middleware.Responder {
+			return middleware.NotImplemented("operation SessionsLogout has not yet been implemented")
 		}),
 	}
 }
@@ -76,10 +76,10 @@ type ToshokanAPI struct {
 	// JSONProducer registers a producer for a "application/json" mime type
 	JSONProducer runtime.Producer
 
-	// SessionsDeleteSessionsHandler sets the operation handler for the delete sessions operation
-	SessionsDeleteSessionsHandler sessions.DeleteSessionsHandler
-	// SessionsPostSessionsHandler sets the operation handler for the post sessions operation
-	SessionsPostSessionsHandler sessions.PostSessionsHandler
+	// SessionsLoginHandler sets the operation handler for the login operation
+	SessionsLoginHandler sessions.LoginHandler
+	// SessionsLogoutHandler sets the operation handler for the logout operation
+	SessionsLogoutHandler sessions.LogoutHandler
 
 	// ServeError is called when an error is received, there is a default handler
 	// but you can set your own with this
@@ -143,12 +143,12 @@ func (o *ToshokanAPI) Validate() error {
 		unregistered = append(unregistered, "JSONProducer")
 	}
 
-	if o.SessionsDeleteSessionsHandler == nil {
-		unregistered = append(unregistered, "sessions.DeleteSessionsHandler")
+	if o.SessionsLoginHandler == nil {
+		unregistered = append(unregistered, "sessions.LoginHandler")
 	}
 
-	if o.SessionsPostSessionsHandler == nil {
-		unregistered = append(unregistered, "sessions.PostSessionsHandler")
+	if o.SessionsLogoutHandler == nil {
+		unregistered = append(unregistered, "sessions.LogoutHandler")
 	}
 
 	if len(unregistered) > 0 {
@@ -249,15 +249,15 @@ func (o *ToshokanAPI) initHandlerCache() {
 		o.handlers = make(map[string]map[string]http.Handler)
 	}
 
-	if o.handlers["DELETE"] == nil {
-		o.handlers["DELETE"] = make(map[string]http.Handler)
-	}
-	o.handlers["DELETE"]["/sessions"] = sessions.NewDeleteSessions(o.context, o.SessionsDeleteSessionsHandler)
-
 	if o.handlers["POST"] == nil {
 		o.handlers["POST"] = make(map[string]http.Handler)
 	}
-	o.handlers["POST"]["/sessions"] = sessions.NewPostSessions(o.context, o.SessionsPostSessionsHandler)
+	o.handlers["POST"]["/sessions"] = sessions.NewLogin(o.context, o.SessionsLoginHandler)
+
+	if o.handlers["DELETE"] == nil {
+		o.handlers["DELETE"] = make(map[string]http.Handler)
+	}
+	o.handlers["DELETE"]["/sessions"] = sessions.NewLogout(o.context, o.SessionsLogoutHandler)
 
 }
 

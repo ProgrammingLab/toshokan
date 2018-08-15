@@ -12,18 +12,18 @@ import (
 	"github.com/go-openapi/runtime/middleware"
 )
 
-// NewDeleteSessionsParams creates a new DeleteSessionsParams object
+// NewLogoutParams creates a new LogoutParams object
 // no default values defined in spec.
-func NewDeleteSessionsParams() DeleteSessionsParams {
+func NewLogoutParams() LogoutParams {
 
-	return DeleteSessionsParams{}
+	return LogoutParams{}
 }
 
-// DeleteSessionsParams contains all the bound params for the delete sessions operation
+// LogoutParams contains all the bound params for the logout operation
 // typically these are obtained from a http.Request
 //
-// swagger:parameters DeleteSessions
-type DeleteSessionsParams struct {
+// swagger:parameters logout
+type LogoutParams struct {
 
 	// HTTP Request Object
 	HTTPRequest *http.Request `json:"-"`
@@ -32,8 +32,8 @@ type DeleteSessionsParams struct {
 // BindRequest both binds and validates a request, it assumes that complex things implement a Validatable(strfmt.Registry) error interface
 // for simple values it will use straight method calls.
 //
-// To ensure default values, the struct must have been initialized with NewDeleteSessionsParams() beforehand.
-func (o *DeleteSessionsParams) BindRequest(r *http.Request, route *middleware.MatchedRoute) error {
+// To ensure default values, the struct must have been initialized with NewLogoutParams() beforehand.
+func (o *LogoutParams) BindRequest(r *http.Request, route *middleware.MatchedRoute) error {
 	var res []error
 
 	o.HTTPRequest = r

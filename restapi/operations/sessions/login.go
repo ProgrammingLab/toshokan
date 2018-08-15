@@ -16,42 +16,42 @@ import (
 	models "github.com/ProgrammingLab/toshokan/models"
 )
 
-// PostSessionsHandlerFunc turns a function with the right signature into a post sessions handler
-type PostSessionsHandlerFunc func(PostSessionsParams) middleware.Responder
+// LoginHandlerFunc turns a function with the right signature into a login handler
+type LoginHandlerFunc func(LoginParams) middleware.Responder
 
 // Handle executing the request and returning a response
-func (fn PostSessionsHandlerFunc) Handle(params PostSessionsParams) middleware.Responder {
+func (fn LoginHandlerFunc) Handle(params LoginParams) middleware.Responder {
 	return fn(params)
 }
 
-// PostSessionsHandler interface for that can handle valid post sessions params
-type PostSessionsHandler interface {
-	Handle(PostSessionsParams) middleware.Responder
+// LoginHandler interface for that can handle valid login params
+type LoginHandler interface {
+	Handle(LoginParams) middleware.Responder
 }
 
-// NewPostSessions creates a new http.Handler for the post sessions operation
-func NewPostSessions(ctx *middleware.Context, handler PostSessionsHandler) *PostSessions {
-	return &PostSessions{Context: ctx, Handler: handler}
+// NewLogin creates a new http.Handler for the login operation
+func NewLogin(ctx *middleware.Context, handler LoginHandler) *Login {
+	return &Login{Context: ctx, Handler: handler}
 }
 
-/*PostSessions swagger:route POST /sessions sessions postSessions
+/*Login swagger:route POST /sessions sessions login
 
 ログイン
 
 メールアドレスとパスワードでログインする。
 
 */
-type PostSessions struct {
+type Login struct {
 	Context *middleware.Context
-	Handler PostSessionsHandler
+	Handler LoginHandler
 }
 
-func (o *PostSessions) ServeHTTP(rw http.ResponseWriter, r *http.Request) {
+func (o *Login) ServeHTTP(rw http.ResponseWriter, r *http.Request) {
 	route, rCtx, _ := o.Context.RouteInfo(r)
 	if rCtx != nil {
 		r = rCtx
 	}
-	var Params = NewPostSessionsParams()
+	var Params = NewLoginParams()
 
 	if err := o.Context.BindValidRequest(r, route, &Params); err != nil { // bind params
 		o.Context.Respond(rw, r, route.Produces, route, err)
@@ -64,9 +64,9 @@ func (o *PostSessions) ServeHTTP(rw http.ResponseWriter, r *http.Request) {
 
 }
 
-// PostSessionsCreatedBody post sessions created body
-// swagger:model PostSessionsCreatedBody
-type PostSessionsCreatedBody struct {
+// LoginCreatedBody login created body
+// swagger:model LoginCreatedBody
+type LoginCreatedBody struct {
 
 	// token
 	Token string `json:"token,omitempty"`
@@ -75,8 +75,8 @@ type PostSessionsCreatedBody struct {
 	User *models.User `json:"user,omitempty"`
 }
 
-// Validate validates this post sessions created body
-func (o *PostSessionsCreatedBody) Validate(formats strfmt.Registry) error {
+// Validate validates this login created body
+func (o *LoginCreatedBody) Validate(formats strfmt.Registry) error {
 	var res []error
 
 	if err := o.validateUser(formats); err != nil {
@@ -89,7 +89,7 @@ func (o *PostSessionsCreatedBody) Validate(formats strfmt.Registry) error {
 	return nil
 }
 
-func (o *PostSessionsCreatedBody) validateUser(formats strfmt.Registry) error {
+func (o *LoginCreatedBody) validateUser(formats strfmt.Registry) error {
 
 	if swag.IsZero(o.User) { // not required
 		return nil
@@ -98,7 +98,7 @@ func (o *PostSessionsCreatedBody) validateUser(formats strfmt.Registry) error {
 	if o.User != nil {
 		if err := o.User.Validate(formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
-				return ve.ValidateName("postSessionsCreated" + "." + "user")
+				return ve.ValidateName("loginCreated" + "." + "user")
 			}
 			return err
 		}
@@ -108,7 +108,7 @@ func (o *PostSessionsCreatedBody) validateUser(formats strfmt.Registry) error {
 }
 
 // MarshalBinary interface implementation
-func (o *PostSessionsCreatedBody) MarshalBinary() ([]byte, error) {
+func (o *LoginCreatedBody) MarshalBinary() ([]byte, error) {
 	if o == nil {
 		return nil, nil
 	}
@@ -116,8 +116,8 @@ func (o *PostSessionsCreatedBody) MarshalBinary() ([]byte, error) {
 }
 
 // UnmarshalBinary interface implementation
-func (o *PostSessionsCreatedBody) UnmarshalBinary(b []byte) error {
-	var res PostSessionsCreatedBody
+func (o *LoginCreatedBody) UnmarshalBinary(b []byte) error {
+	var res LoginCreatedBody
 	if err := swag.ReadJSON(b, &res); err != nil {
 		return err
 	}

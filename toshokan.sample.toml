@@ -1,0 +1,4 @@
+debug = true
+
+[DB]
+dataSourceName = "user:password@unix(/tmp/mysql.sock)/dbName"

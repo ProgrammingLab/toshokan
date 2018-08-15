@@ -3,11 +3,12 @@ consumes:
 - application/json
 info:
   description: プロラボの図書館理システムです。
-  title: プロラボ図書館
+  title: Toshokan
   version: 1.0.0
 paths:
   /sessions:
     post:
+      operationId: login
       summary: ログイン
       tags:
         - sessions
@@ -37,6 +38,7 @@ paths:
           description: Unauthorized
     
     delete:
+      operationId: logout
       summary: ログアウト
       tags:
         - sessions
@@ -83,4 +85,4 @@ definitions:
 produces:
 - application/json
 schemes:
-- https
+- http

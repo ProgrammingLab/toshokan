@@ -3,17 +3,22 @@
 package restapi
 
 import (
+	"log"
 	"crypto/tls"
 	"net/http"
+	"time"
+
+	"github.com/ProgrammingLab/toshokan/app/dao"
 
 	errors "github.com/go-openapi/errors"
 	runtime "github.com/go-openapi/runtime"
 	middleware "github.com/go-openapi/runtime/middleware"
 
 	"github.com/ProgrammingLab/toshokan/restapi/operations"
+	"github.com/ProgrammingLab/toshokan/restapi/operations/sessions"
 )
 
-//go:generate swagger generate server --target .. --name toshokan --spec ../swagger.yml
+//go:generate swagger generate server --target .. --name  --spec ../swagger.yml
 
 func configureFlags(api *operations.ToshokanAPI) {
 	// api.CommandLineOptionsGroups = []swag.CommandLineOptionsGroup{ ... }
@@ -27,17 +32,32 @@ func configureAPI(api *operations.ToshokanAPI) http.Handler {
 	// Expected interface func(string, ...interface{})
 	//
 	// Example:
-	// api.Logger = log.Printf
+	api.Logger = log.Printf
 
 	api.JSONConsumer = runtime.JSONConsumer()
 
 	api.JSONProducer = runtime.JSONProducer()
 
-	api.PostSessionsHandler = operations.PostSessionsHandlerFunc(func(params operations.PostSessionsParams) middleware.Responder {
-		return middleware.NotImplemented("operation .PostSessions has not yet been implemented")
+	api.SessionsLoginHandler = sessions.LoginHandlerFunc(func(params sessions.LoginParams) middleware.Responder {
+		return middleware.NotImplemented("operation sessions.Login has not yet been implemented")
+	})
+	api.SessionsLogoutHandler = sessions.LogoutHandlerFunc(func(params sessions.LogoutParams) middleware.Responder {
+		return middleware.NotImplemented("operation sessions.Logout has not yet been implemented")
 	})
 
 	api.ServerShutdown = func() {}
+
+	delay := 500 * time.Millisecond
+	for {
+		err := dao.ConnectDB()
+		if err != nil {
+			api.Logger("%+v", err)
+			time.Sleep(delay)
+			delay += time.Second
+			continue
+		}
+		break
+	}
 
 	return setupGlobalMiddleware(api.Serve(setupMiddlewares))
 }

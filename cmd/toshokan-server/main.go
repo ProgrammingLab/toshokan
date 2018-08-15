@@ -27,7 +27,7 @@ func main() {
 	defer server.Shutdown()
 
 	parser := flags.NewParser(server, flags.Default)
-	parser.ShortDescription = "プロラボ図書館"
+	parser.ShortDescription = "Toshokan"
 	parser.LongDescription = "プロラボの図書館理システムです。"
 
 	server.ConfigureFlags()

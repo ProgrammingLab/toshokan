@@ -16,18 +16,18 @@ import (
 	models "github.com/ProgrammingLab/toshokan/models"
 )
 
-// NewPostSessionsParams creates a new PostSessionsParams object
+// NewLoginParams creates a new LoginParams object
 // no default values defined in spec.
-func NewPostSessionsParams() PostSessionsParams {
+func NewLoginParams() LoginParams {
 
-	return PostSessionsParams{}
+	return LoginParams{}
 }
 
-// PostSessionsParams contains all the bound params for the post sessions operation
+// LoginParams contains all the bound params for the login operation
 // typically these are obtained from a http.Request
 //
-// swagger:parameters PostSessions
-type PostSessionsParams struct {
+// swagger:parameters login
+type LoginParams struct {
 
 	// HTTP Request Object
 	HTTPRequest *http.Request `json:"-"`
@@ -42,8 +42,8 @@ type PostSessionsParams struct {
 // BindRequest both binds and validates a request, it assumes that complex things implement a Validatable(strfmt.Registry) error interface
 // for simple values it will use straight method calls.
 //
-// To ensure default values, the struct must have been initialized with NewPostSessionsParams() beforehand.
-func (o *PostSessionsParams) BindRequest(r *http.Request, route *middleware.MatchedRoute) error {
+// To ensure default values, the struct must have been initialized with NewLoginParams() beforehand.
+func (o *LoginParams) BindRequest(r *http.Request, route *middleware.MatchedRoute) error {
 	var res []error
 
 	o.HTTPRequest = r

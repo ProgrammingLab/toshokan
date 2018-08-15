@@ -25,12 +25,12 @@ func init() {
     "application/json"
   ],
   "schemes": [
-    "https"
+    "http"
   ],
   "swagger": "2.0",
   "info": {
     "description": "プロラボの図書館理システムです。",
-    "title": "プロラボ図書館",
+    "title": "Toshokan",
     "version": "1.0.0"
   },
   "paths": {
@@ -44,6 +44,7 @@ func init() {
           "sessions"
         ],
         "summary": "ログイン",
+        "operationId": "login",
         "parameters": [
           {
             "description": "メールアドレスとパスワード",
@@ -82,6 +83,7 @@ func init() {
           "sessions"
         ],
         "summary": "ログアウト",
+        "operationId": "logout",
         "responses": {
           "204": {
             "description": "No Content"
@@ -149,12 +151,12 @@ func init() {
     "application/json"
   ],
   "schemes": [
-    "https"
+    "http"
   ],
   "swagger": "2.0",
   "info": {
     "description": "プロラボの図書館理システムです。",
-    "title": "プロラボ図書館",
+    "title": "Toshokan",
     "version": "1.0.0"
   },
   "paths": {
@@ -168,6 +170,7 @@ func init() {
           "sessions"
         ],
         "summary": "ログイン",
+        "operationId": "login",
         "parameters": [
           {
             "description": "メールアドレスとパスワード",
@@ -206,6 +209,7 @@ func init() {
           "sessions"
         ],
         "summary": "ログアウト",
+        "operationId": "logout",
         "responses": {
           "204": {
             "description": "No Content"

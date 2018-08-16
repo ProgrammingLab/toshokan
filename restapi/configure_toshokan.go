@@ -3,16 +3,16 @@
 package restapi
 
 import (
-	"log"
 	"crypto/tls"
+	"log"
 	"net/http"
 	"time"
 
+	"github.com/ProgrammingLab/toshokan/app/controllers"
 	"github.com/ProgrammingLab/toshokan/app/dao"
 
 	errors "github.com/go-openapi/errors"
 	runtime "github.com/go-openapi/runtime"
-	middleware "github.com/go-openapi/runtime/middleware"
 
 	"github.com/ProgrammingLab/toshokan/restapi/operations"
 	"github.com/ProgrammingLab/toshokan/restapi/operations/sessions"
@@ -38,12 +38,8 @@ func configureAPI(api *operations.ToshokanAPI) http.Handler {
 
 	api.JSONProducer = runtime.JSONProducer()
 
-	api.SessionsLoginHandler = sessions.LoginHandlerFunc(func(params sessions.LoginParams) middleware.Responder {
-		return middleware.NotImplemented("operation sessions.Login has not yet been implemented")
-	})
-	api.SessionsLogoutHandler = sessions.LogoutHandlerFunc(func(params sessions.LogoutParams) middleware.Responder {
-		return middleware.NotImplemented("operation sessions.Logout has not yet been implemented")
-	})
+	api.SessionsLoginHandler = sessions.LoginHandlerFunc(controllers.Login)
+	api.SessionsLogoutHandler = sessions.LogoutHandlerFunc(controllers.Logout)
 
 	api.ServerShutdown = func() {}
 

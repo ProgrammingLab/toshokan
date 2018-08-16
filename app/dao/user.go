@@ -3,6 +3,8 @@ package dao
 import (
 	"context"
 	"time"
+
+	"golang.org/x/crypto/bcrypt"
 )
 
 type User struct {
@@ -33,4 +35,8 @@ func FindUserByName(ctx context.Context, name string) (User, error) {
 		return User{}, err
 	}
 	return u, nil
+}
+
+func (u *User) ComparePassword(password string) error {
+	return bcrypt.CompareHashAndPassword([]byte(u.PasswordDigest), []byte(password))
 }

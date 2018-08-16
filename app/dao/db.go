@@ -41,6 +41,9 @@ func migrate() error {
 	if err := utf8mb4().AutoMigrate(Session{}).Error; err != nil {
 		return err
 	}
+	if err := db.Model(Session{}).AddForeignKey("user_id", "users(user_id)", "CASCADE", "CASCADE").Error; err != nil {
+		return err
+	}
 
 	return nil
 }
@@ -68,10 +71,10 @@ func insertAdminUser() error {
 	}
 
 	u := User{}
-	res := tx.Find(&u, "name = ?", "admin")
-	if err := res.Error; err != nil && !res.RecordNotFound() {
+	res := tx.Model(u).Where("name = ?", "admin").Scan(&u)
+	if !res.RecordNotFound() {
 		tx.Rollback()
-		return err
+		return res.Error
 	}
 
 	if err := tx.Create(&admin).Error; err != nil {

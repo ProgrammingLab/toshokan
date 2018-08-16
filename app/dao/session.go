@@ -9,4 +9,6 @@ type Session struct {
 	CreatedAt time.Time
 	ExpireAt  time.Time
 	Token     string `gorm:"not null; unique_index"`
+	User      User   `gorm:"foreignkey:UserID; association_foreignkey:UserID"`
+	UserID    uint   `gorm:"not null"`
 }

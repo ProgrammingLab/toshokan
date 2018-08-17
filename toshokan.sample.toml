@@ -2,4 +2,4 @@ adminEmail = "admin@kurume-nct.com"
 debug = true
 
 [DB]
-dataSourceName = "user:password@tcp(mysql:3306)/toshokan?parseTime=true"
+dataSourceName = "root:password@tcp(mysql:3306)/toshokan?parseTime=true"

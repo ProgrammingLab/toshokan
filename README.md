@@ -12,7 +12,7 @@ TOSHOKAN_DB_PASSWORD="password"
 ^C
 $ 
 ```
-`toshokan.toml`を開き、`dataSourceName`にMySQLのパスワードを設定する。
+`toshokan.toml`を開き、`TOSHOKAN_DB_PASSWORD`に入れたパスワードを`dataSourceName`に設定する。
 
 ### Run the backend server
 ```

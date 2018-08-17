@@ -38,6 +38,8 @@ func configureAPI(api *operations.ToshokanAPI) http.Handler {
 
 	api.JSONProducer = runtime.JSONProducer()
 
+	api.TokenAuth = controllers.Authenticate
+
 	api.SessionsLoginHandler = sessions.LoginHandlerFunc(controllers.Login)
 	api.SessionsLogoutHandler = sessions.LogoutHandlerFunc(controllers.Logout)
 

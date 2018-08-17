@@ -78,6 +78,11 @@ func init() {
         }
       },
       "delete": {
+        "security": [
+          {
+            "Token": []
+          }
+        ],
         "description": "ログアウトする。",
         "tags": [
           "sessions"
@@ -134,6 +139,13 @@ func init() {
           "format": "int32"
         }
       }
+    }
+  },
+  "securityDefinitions": {
+    "Token": {
+      "type": "apiKey",
+      "name": "X-Token",
+      "in": "header"
     }
   },
   "tags": [
@@ -204,6 +216,11 @@ func init() {
         }
       },
       "delete": {
+        "security": [
+          {
+            "Token": []
+          }
+        ],
         "description": "ログアウトする。",
         "tags": [
           "sessions"
@@ -260,6 +277,13 @@ func init() {
           "format": "int32"
         }
       }
+    }
+  },
+  "securityDefinitions": {
+    "Token": {
+      "type": "apiKey",
+      "name": "X-Token",
+      "in": "header"
     }
   },
   "tags": [

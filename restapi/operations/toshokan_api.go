@@ -42,9 +42,17 @@ func NewToshokanAPI(spec *loads.Document) *ToshokanAPI {
 		SessionsLoginHandler: sessions.LoginHandlerFunc(func(params sessions.LoginParams) middleware.Responder {
 			return middleware.NotImplemented("operation SessionsLogin has not yet been implemented")
 		}),
-		SessionsLogoutHandler: sessions.LogoutHandlerFunc(func(params sessions.LogoutParams) middleware.Responder {
+		SessionsLogoutHandler: sessions.LogoutHandlerFunc(func(params sessions.LogoutParams, principal interface{}) middleware.Responder {
 			return middleware.NotImplemented("operation SessionsLogout has not yet been implemented")
 		}),
+
+		// Applies when the "X-Token" header is set
+		TokenAuth: func(token string) (interface{}, error) {
+			return nil, errors.NotImplemented("api key auth (Token) X-Token from header param [X-Token] has not yet been implemented")
+		},
+
+		// default authorizer is authorized meaning no requests are blocked
+		APIAuthorizer: security.Authorized(),
 	}
 }
 
@@ -75,6 +83,13 @@ type ToshokanAPI struct {
 
 	// JSONProducer registers a producer for a "application/json" mime type
 	JSONProducer runtime.Producer
+
+	// TokenAuth registers a function that takes a token and returns a principal
+	// it performs authentication based on an api key X-Token provided in the header
+	TokenAuth func(string) (interface{}, error)
+
+	// APIAuthorizer provides access control (ACL/RBAC/ABAC) by providing access to the request and authenticated principal
+	APIAuthorizer runtime.Authorizer
 
 	// SessionsLoginHandler sets the operation handler for the login operation
 	SessionsLoginHandler sessions.LoginHandler
@@ -143,6 +158,10 @@ func (o *ToshokanAPI) Validate() error {
 		unregistered = append(unregistered, "JSONProducer")
 	}
 
+	if o.TokenAuth == nil {
+		unregistered = append(unregistered, "XTokenAuth")
+	}
+
 	if o.SessionsLoginHandler == nil {
 		unregistered = append(unregistered, "sessions.LoginHandler")
 	}
@@ -166,14 +185,24 @@ func (o *ToshokanAPI) ServeErrorFor(operationID string) func(http.ResponseWriter
 // AuthenticatorsFor gets the authenticators for the specified security schemes
 func (o *ToshokanAPI) AuthenticatorsFor(schemes map[string]spec.SecurityScheme) map[string]runtime.Authenticator {
 
-	return nil
+	result := make(map[string]runtime.Authenticator)
+	for name, scheme := range schemes {
+		switch name {
+
+		case "Token":
+
+			result[name] = o.APIKeyAuthenticator(scheme.Name, scheme.In, o.TokenAuth)
+
+		}
+	}
+	return result
 
 }
 
 // Authorizer returns the registered authorizer
 func (o *ToshokanAPI) Authorizer() runtime.Authorizer {
 
-	return nil
+	return o.APIAuthorizer
 
 }
 

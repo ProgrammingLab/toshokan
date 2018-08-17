@@ -5,6 +5,13 @@ info:
   description: プロラボの図書館理システムです。
   title: Toshokan
   version: 1.0.0
+
+securityDefinitions:
+  Token:
+    type: apiKey
+    in: header
+    name: X-Token
+
 paths:
   /sessions:
     post:
@@ -43,6 +50,8 @@ paths:
       tags:
         - sessions
       description: ログアウトする。
+      security:
+        - Token: []
       responses:
         204:
           description: No Content

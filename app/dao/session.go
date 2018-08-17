@@ -3,8 +3,11 @@ package dao
 import (
 	"context"
 	"crypto/rand"
+	"errors"
 	"math"
 	"math/big"
+	"strconv"
+	"strings"
 	"time"
 
 	"golang.org/x/crypto/bcrypt"
@@ -13,15 +16,22 @@ import (
 )
 
 type Session struct {
-	SessionID uint `gorm:"primary_key"`
-	CreatedAt time.Time
-	ExpireAt  time.Time
-	Token     string `gorm:"not null; unique_index"`
-	User      User   `gorm:"foreignkey:UserID; association_foreignkey:UserID"`
-	UserID    uint   `gorm:"not null"`
+	SessionID  uint `gorm:"primary_key"`
+	CreatedAt  time.Time
+	ExpireAt   time.Time
+	PrivateKey string `gorm:"not null; unique_index"`
+	User       User   `gorm:"foreignkey:UserID; association_foreignkey:UserID"`
+	UserID     uint   `gorm:"not null"`
 }
 
-const SessionLifeTime = 48 * time.Hour
+const (
+	SessionLifeTime = 48 * time.Hour
+)
+
+var (
+	ErrBadSessionTokenFormat = errors.New("bad session token format")
+	ErrInvalidSessionToken   = errors.New("invalid session token")
+)
 
 func NewSession(ctx context.Context, email, password string) (*Session, error) {
 	u := &User{}
@@ -37,7 +47,7 @@ func NewSession(ctx context.Context, email, password string) (*Session, error) {
 		return nil, err
 	}
 
-	token, err := util.GenerateRandomString(32)
+	key, err := util.GenerateRandomString(32)
 	if err != nil {
 		return nil, err
 	}
@@ -58,10 +68,10 @@ func NewSession(ctx context.Context, email, password string) (*Session, error) {
 	}
 
 	s := &Session{
-		SessionID: id,
-		ExpireAt:  time.Now().Add(SessionLifeTime),
-		Token:     token,
-		UserID:    u.UserID,
+		SessionID:  id,
+		ExpireAt:   time.Now().Add(SessionLifeTime),
+		PrivateKey: key,
+		UserID:     u.UserID,
 	}
 
 	if err := tx.Create(s).Error; err != nil {
@@ -74,4 +84,39 @@ func NewSession(ctx context.Context, email, password string) (*Session, error) {
 	}
 	s.User = *u
 	return s, nil
+}
+
+func GetSession(ctx context.Context, token string) (*Session, error) {
+	i := strings.Index(token, "_")
+	if i == -1 || len(token) < i+2 {
+		return nil, ErrBadSessionTokenFormat
+	}
+
+	rawID := token[:i]
+	key := token[i+1:]
+	id, err := strconv.ParseInt(rawID, 10, 64)
+	if err != nil {
+		return nil, ErrBadSessionTokenFormat
+	}
+
+	s := &Session{}
+	res := db.Model(Session{}).Where("session_id = ?", id).Scan(s)
+	if err := res.Error; err != nil {
+		if res.RecordNotFound() {
+			return nil, ErrInvalidSessionToken
+		}
+		return nil, err
+	}
+
+	if s.PrivateKey != key || time.Now().After(s.ExpireAt) {
+		return nil, ErrInvalidSessionToken
+	}
+
+	s.PrivateKey = ""
+
+	return s, nil
+}
+
+func (s *Session) Delete() error {
+	return db.Where("session_id = ?", s.SessionID).Delete(Session{}).Error
 }

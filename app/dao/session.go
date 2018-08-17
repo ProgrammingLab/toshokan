@@ -19,7 +19,7 @@ type Session struct {
 	SessionID  uint `gorm:"primary_key"`
 	CreatedAt  time.Time
 	ExpireAt   time.Time
-	PrivateKey string `gorm:"not null; unique_index"`
+	PrivateKey string `gorm:"not null"`
 	User       User   `gorm:"foreignkey:UserID; association_foreignkey:UserID"`
 	UserID     uint   `gorm:"not null"`
 }

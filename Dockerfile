@@ -6,4 +6,4 @@ RUN go get -u -v github.com/ProgrammingLab/toshokan/... && \
     go install github.com/ProgrammingLab/toshokan/cmd/toshokan-server && \
     rm -rf /go/src/github.com/
 
-CMD [ "/go/bin/toshokan-server" ]
+CMD [ "/go/bin/toshokan-server", "--port=53830", "--host=0.0.0.0" ]

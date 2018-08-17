@@ -1,8 +1,8 @@
 # toshokan
 プロラボの図書館
 
-# Usage(for docker-compose)
-## Install
+## Usage(for docker-compose)
+### Install
 ```
 $ git clone https://github.com/ProgrammingLab/toshokan.git
 $ cd toshokan
@@ -14,7 +14,7 @@ $
 ```
 `toshokan.toml`を開き、`dataSourceName`にMySQLのパスワードを設定する。
 
-## Run the backend server
+### Run the backend server
 ```
 $ docker-compose up
 ```

@@ -1,11 +1,12 @@
-create_table :books, force: :cascade do |t|
-    t.string :id, null: false
+create_table :books, id: uuid, force: :cascade do |t|
+    t.uuid :id, null: false
     t.string :title, null: false
     t.string :authors, null: false
     t.string :publisher, null: false
-    t.string :published_at, null: false
+    t.date :published_at, null: false
     t.string :isbn13, null: false
     t.string :image_url
+    t.timestamps :last_update
 
-    t.index [:isbn13]
+    t.index [:id]
 end

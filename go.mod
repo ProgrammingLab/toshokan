@@ -3,7 +3,8 @@ module github.com/ProgrammingLab/toshokan
 go 1.12
 
 require (
-	github.com/grpc-ecosystem/grpc-gateway v1.9.6 // indirect
+	github.com/gogo/protobuf v1.2.1
+	github.com/grpc-ecosystem/grpc-gateway v1.9.6
 	github.com/izumin5210/grapi v0.4.1
 	github.com/lib/pq v1.2.0 // indirect
 	github.com/volatiletech/inflect v0.0.0-20170731032912-e7201282ae8d // indirect

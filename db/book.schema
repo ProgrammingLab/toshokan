@@ -5,7 +5,7 @@ create_table :books, force: :cascade do |t|
     t.string :publisher, null: false
     t.string :published_at, null: false
     t.string :isbn13, null: false
-    t.string image_url
+    t.string :image_url
 
     t.index [:isbn13]
 end

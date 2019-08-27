@@ -1,0 +1,6 @@
+create_table :authors, id: uuid, force: :cascade do |t|
+    t.uuid :id, null: false
+    t.string :name, null: false
+
+    t.index [:id]
+end

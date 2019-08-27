@@ -1,1 +1,2 @@
 require 'book.schema'
+require 'author.schema'

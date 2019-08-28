@@ -22,27 +22,27 @@ func NewBookServiceServer() interface {
 type bookServiceServerImpl struct {
 }
 
-func (s *bookServiceServerImpl) ListBooks(ctx context.Context, req *api_pb.ListBooksRequest) (*api_pb.ListBooksResponse, error) {
+func (s *bookServiceServerImpl) ListBooks(_ context.Context, _ *api_pb.ListBooksRequest) (*api_pb.ListBooksResponse, error) {
 	// TODO: Not yet implemented.
 	return nil, status.Error(codes.Unimplemented, "TODO: You should implement it!")
 }
 
-func (s *bookServiceServerImpl) GetBook(ctx context.Context, req *api_pb.GetBookRequest) (*api_pb.Book, error) {
+func (s *bookServiceServerImpl) GetBook(_ context.Context, _ *api_pb.GetBookRequest) (*api_pb.Book, error) {
 	// TODO: Not yet implemented.
 	return nil, status.Error(codes.Unimplemented, "TODO: You should implement it!")
 }
 
-func (s *bookServiceServerImpl) CreateBook(ctx context.Context, req *api_pb.CreateBookRequest) (*api_pb.Book, error) {
+func (s *bookServiceServerImpl) CreateBook(_ context.Context, _ *api_pb.CreateBookRequest) (*api_pb.Book, error) {
 	// TODO: Not yet implemented.
 	return nil, status.Error(codes.Unimplemented, "TODO: You should implement it!")
 }
 
-func (s *bookServiceServerImpl) UpdateBook(ctx context.Context, req *api_pb.UpdateBookRequest) (*api_pb.Book, error) {
+func (s *bookServiceServerImpl) UpdateBook(_ context.Context, _ *api_pb.UpdateBookRequest) (*api_pb.Book, error) {
 	// TODO: Not yet implemented.
 	return nil, status.Error(codes.Unimplemented, "TODO: You should implement it!")
 }
 
-func (s *bookServiceServerImpl) DeleteBook(ctx context.Context, req *api_pb.DeleteBookRequest) (*empty.Empty, error) {
+func (s *bookServiceServerImpl) DeleteBook(_ context.Context, _ *api_pb.DeleteBookRequest) (*empty.Empty, error) {
 	// TODO: Not yet implemented.
 	return nil, status.Error(codes.Unimplemented, "TODO: You should implement it!")
 }

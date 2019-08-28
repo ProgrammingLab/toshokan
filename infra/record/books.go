@@ -26,7 +26,6 @@ import (
 type Book struct {
 	ID          string      `boil:"id" json:"id" toml:"id" yaml:"id"`
 	Title       string      `boil:"title" json:"title" toml:"title" yaml:"title"`
-	Authors     string      `boil:"authors" json:"authors" toml:"authors" yaml:"authors"`
 	Publisher   string      `boil:"publisher" json:"publisher" toml:"publisher" yaml:"publisher"`
 	PublishedAt time.Time   `boil:"published_at" json:"published_at" toml:"published_at" yaml:"published_at"`
 	Isbn13      string      `boil:"isbn13" json:"isbn13" toml:"isbn13" yaml:"isbn13"`
@@ -41,7 +40,6 @@ type Book struct {
 var BookColumns = struct {
 	ID          string
 	Title       string
-	Authors     string
 	Publisher   string
 	PublishedAt string
 	Isbn13      string
@@ -51,7 +49,6 @@ var BookColumns = struct {
 }{
 	ID:          "id",
 	Title:       "title",
-	Authors:     "authors",
 	Publisher:   "publisher",
 	PublishedAt: "published_at",
 	Isbn13:      "isbn13",
@@ -109,7 +106,6 @@ func (w whereHelpernull_String) GTE(x null.String) qm.QueryMod {
 var BookWhere = struct {
 	ID          whereHelperstring
 	Title       whereHelperstring
-	Authors     whereHelperstring
 	Publisher   whereHelperstring
 	PublishedAt whereHelpertime_Time
 	Isbn13      whereHelperstring
@@ -119,7 +115,6 @@ var BookWhere = struct {
 }{
 	ID:          whereHelperstring{field: "\"books\".\"id\""},
 	Title:       whereHelperstring{field: "\"books\".\"title\""},
-	Authors:     whereHelperstring{field: "\"books\".\"authors\""},
 	Publisher:   whereHelperstring{field: "\"books\".\"publisher\""},
 	PublishedAt: whereHelpertime_Time{field: "\"books\".\"published_at\""},
 	Isbn13:      whereHelperstring{field: "\"books\".\"isbn13\""},
@@ -149,8 +144,8 @@ func (*bookR) NewStruct() *bookR {
 type bookL struct{}
 
 var (
-	bookAllColumns            = []string{"id", "title", "authors", "publisher", "published_at", "isbn13", "image_url", "created_at", "updated_at"}
-	bookColumnsWithoutDefault = []string{"title", "authors", "publisher", "published_at", "isbn13", "image_url", "created_at", "updated_at"}
+	bookAllColumns            = []string{"id", "title", "publisher", "published_at", "isbn13", "image_url", "created_at", "updated_at"}
+	bookColumnsWithoutDefault = []string{"title", "publisher", "published_at", "isbn13", "image_url", "created_at", "updated_at"}
 	bookColumnsWithDefault    = []string{"id"}
 	bookPrimaryKeyColumns     = []string{"id"}
 )

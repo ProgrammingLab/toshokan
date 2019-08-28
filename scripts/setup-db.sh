@@ -6,6 +6,7 @@ if [ ! -z "$1" ] && [ $1 != '-y' ]; then
 fi
 
 docker-compose exec pg psql -c 'create database toshokan;' -U postgres
+docker-compose exec pg psql -c 'create extension pgcrypto;' -U postgres toshokan
 
 docker-compose build
 if [ $? -gt 0 ]; then

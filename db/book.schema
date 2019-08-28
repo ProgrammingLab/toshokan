@@ -1,0 +1,9 @@
+
+create_table :books, id: :uuid, force: :cascade do |t|
+    t.string :title, null: false
+    t.string :publisher, null: false
+    t.date :published_at, null: false
+    t.string :isbn13, null: false
+    t.string :image_url
+    t.timestamps
+end

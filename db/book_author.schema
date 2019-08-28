@@ -1,4 +1,9 @@
-create_table :book_author, id: uuid, force: :cascade do |t|
-    t.uuid :book_id, null: false
-    t.uuid :author_uuid, null: false
+create_table :book_authors, force: :cascade do |t|
+    t.uuid :books_id, null: false
+    t.references :authors, foreign_key: true, null: false
+
+    t.index [:books_id]
 end
+
+add_foreign_key :book_authors, :books, column: :books_id
+add_foreign_key :book_authors, :authors, column: :authors_id

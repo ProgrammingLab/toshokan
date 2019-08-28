@@ -4,6 +4,7 @@ package ProgrammingLab.toshokan;
 
 import "google/api/annotations.proto";
 import "google/protobuf/empty.proto";
+import "google/protobuf/timestamp.proto";
 
 service BookService {
   rpc ListBooks (ListBooksRequest) returns (ListBooksResponse) {
@@ -37,9 +38,17 @@ service BookService {
 
 message Book {
   string book_id = 1;
+  string title = 2;
+  repeated string authors = 3;
+  string publisher = 4;
+  google.protobuf.Timestamp published_at = 5;
+  string description = 6;
+  string isbn13 = 7;
+  string image_url = 8;
 }
 
 message ListBooksRequest {
+  string query = 1;
 }
 
 message ListBooksResponse {

@@ -26,6 +26,14 @@
             }
           }
         },
+        "parameters": [
+          {
+            "name": "query",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          }
+        ],
         "tags": [
           "BookService"
         ]
@@ -139,6 +147,31 @@
       "type": "object",
       "properties": {
         "book_id": {
+          "type": "string"
+        },
+        "title": {
+          "type": "string"
+        },
+        "authors": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "publisher": {
+          "type": "string"
+        },
+        "published_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "description": {
+          "type": "string"
+        },
+        "isbn13": {
+          "type": "string"
+        },
+        "image_url": {
           "type": "string"
         }
       }

@@ -1,0 +1,186 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "lendings.proto",
+    "version": "version not set"
+  },
+  "schemes": [
+    "http",
+    "https"
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/books/{lending.book_id}/lendings": {
+      "post": {
+        "operationId": "BorrowBook",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/toshokanLending"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "lending.book_id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/toshokanLending"
+            }
+          }
+        ],
+        "tags": [
+          "LendingService"
+        ]
+      }
+    },
+    "/lendings/{lending_id}": {
+      "get": {
+        "operationId": "GetLending",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/toshokanLending"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "lending_id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "LendingService"
+        ]
+      },
+      "patch": {
+        "operationId": "ReturnBook",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/toshokanLending"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "lending_id",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/toshokanReturnBookRequest"
+            }
+          }
+        ],
+        "tags": [
+          "LendingService"
+        ]
+      }
+    },
+    "/user/lendings": {
+      "get": {
+        "operationId": "ListUserLendings",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/toshokanListLendingsResponse"
+            }
+          }
+        },
+        "tags": [
+          "LendingService"
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "toshokanLending": {
+      "type": "object",
+      "properties": {
+        "lending_id": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "book_id": {
+          "type": "string"
+        },
+        "user": {
+          "$ref": "#/definitions/toshokanUser"
+        },
+        "lent_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "returned_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "returned": {
+          "type": "boolean",
+          "format": "boolean"
+        }
+      }
+    },
+    "toshokanListLendingsResponse": {
+      "type": "object",
+      "properties": {
+        "lendings": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/toshokanLending"
+          }
+        }
+      }
+    },
+    "toshokanReturnBookRequest": {
+      "type": "object",
+      "properties": {
+        "lending_id": {
+          "type": "integer",
+          "format": "int64"
+        }
+      }
+    },
+    "toshokanUser": {
+      "type": "object",
+      "properties": {
+        "user_id": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "name": {
+          "type": "string"
+        },
+        "display_name": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}

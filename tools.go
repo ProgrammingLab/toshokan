@@ -6,6 +6,7 @@ package tools
 
 // tool dependencies
 import (
+	_ "github.com/gogo/protobuf/protoc-gen-gogofast"
 	_ "github.com/volatiletech/sqlboiler"
 	_ "github.com/volatiletech/sqlboiler/drivers/sqlboiler-psql"
 )

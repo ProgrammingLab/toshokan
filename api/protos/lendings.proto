@@ -1,0 +1,62 @@
+syntax = "proto3";
+option go_package = "api_pb";
+package ProgrammingLab.toshokan;
+
+import "google/api/annotations.proto";
+import "google/protobuf/empty.proto";
+import "google/protobuf/timestamp.proto";
+
+import "user.proto";
+
+service LendingService {
+  rpc ListUserLendings (ListUserLendingsRequest) returns (ListLendingsResponse) {
+    option (google.api.http) = {
+      get: "/user/lendings"
+    };
+  }
+  rpc GetLending (GetLendingRequest) returns (Lending) {
+    option (google.api.http) = {
+      get: "/lendings/{lending_id}"
+    };
+  }
+  rpc BorrowBook (BorrowBookRequest) returns (Lending) {
+    option (google.api.http) = {
+      post: "/books/{lending.book_id}/lendings"
+      body: "lending"
+    };
+  }
+  rpc ReturnBook (ReturnBookRequest) returns (Lending) {
+    option (google.api.http) = {
+      patch: "/lendings/{lending_id}"
+      body: "*"
+    };
+  }
+}
+
+message Lending {
+  uint32 lending_id = 1;
+  string book_id = 2;
+  User user = 3;
+  google.protobuf.Timestamp lent_at = 4;
+  google.protobuf.Timestamp returned_at = 5;
+  bool returned = 6;
+}
+
+message ListUserLendingsRequest {
+}
+
+message ListLendingsResponse {
+  repeated Lending lendings = 1;
+}
+
+message GetLendingRequest {
+  string lending_id = 1;
+}
+
+message BorrowBookRequest {
+  Lending lending = 1;
+}
+
+message ReturnBookRequest {
+  uint32 lending_id = 1;
+}

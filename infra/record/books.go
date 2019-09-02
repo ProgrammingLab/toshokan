@@ -126,13 +126,16 @@ var BookWhere = struct {
 // BookRels is where relationship names are stored.
 var BookRels = struct {
 	BookAuthors string
+	Lendings    string
 }{
 	BookAuthors: "BookAuthors",
+	Lendings:    "Lendings",
 }
 
 // bookR is where relationships are stored.
 type bookR struct {
 	BookAuthors BookAuthorSlice
+	Lendings    LendingSlice
 }
 
 // NewStruct creates a new relationship struct
@@ -446,6 +449,27 @@ func (o *Book) BookAuthors(mods ...qm.QueryMod) bookAuthorQuery {
 	return query
 }
 
+// Lendings retrieves all the lending's Lendings with an executor.
+func (o *Book) Lendings(mods ...qm.QueryMod) lendingQuery {
+	var queryMods []qm.QueryMod
+	if len(mods) != 0 {
+		queryMods = append(queryMods, mods...)
+	}
+
+	queryMods = append(queryMods,
+		qm.Where("\"lendings\".\"book_id\"=?", o.ID),
+	)
+
+	query := Lendings(queryMods...)
+	queries.SetFrom(query.Query, "\"lendings\"")
+
+	if len(queries.GetSelect(query.Query)) == 0 {
+		queries.SetSelect(query.Query, []string{"\"lendings\".*"})
+	}
+
+	return query
+}
+
 // LoadBookAuthors allows an eager lookup of values, cached into the
 // loaded structs of the objects. This is for a 1-M or N-M relationship.
 func (bookL) LoadBookAuthors(ctx context.Context, e boil.ContextExecutor, singular bool, maybeBook interface{}, mods queries.Applicator) error {
@@ -541,6 +565,101 @@ func (bookL) LoadBookAuthors(ctx context.Context, e boil.ContextExecutor, singul
 	return nil
 }
 
+// LoadLendings allows an eager lookup of values, cached into the
+// loaded structs of the objects. This is for a 1-M or N-M relationship.
+func (bookL) LoadLendings(ctx context.Context, e boil.ContextExecutor, singular bool, maybeBook interface{}, mods queries.Applicator) error {
+	var slice []*Book
+	var object *Book
+
+	if singular {
+		object = maybeBook.(*Book)
+	} else {
+		slice = *maybeBook.(*[]*Book)
+	}
+
+	args := make([]interface{}, 0, 1)
+	if singular {
+		if object.R == nil {
+			object.R = &bookR{}
+		}
+		args = append(args, object.ID)
+	} else {
+	Outer:
+		for _, obj := range slice {
+			if obj.R == nil {
+				obj.R = &bookR{}
+			}
+
+			for _, a := range args {
+				if a == obj.ID {
+					continue Outer
+				}
+			}
+
+			args = append(args, obj.ID)
+		}
+	}
+
+	if len(args) == 0 {
+		return nil
+	}
+
+	query := NewQuery(qm.From(`lendings`), qm.WhereIn(`lendings.book_id in ?`, args...))
+	if mods != nil {
+		mods.Apply(query)
+	}
+
+	results, err := query.QueryContext(ctx, e)
+	if err != nil {
+		return errors.Wrap(err, "failed to eager load lendings")
+	}
+
+	var resultSlice []*Lending
+	if err = queries.Bind(results, &resultSlice); err != nil {
+		return errors.Wrap(err, "failed to bind eager loaded slice lendings")
+	}
+
+	if err = results.Close(); err != nil {
+		return errors.Wrap(err, "failed to close results in eager load on lendings")
+	}
+	if err = results.Err(); err != nil {
+		return errors.Wrap(err, "error occurred during iteration of eager loaded relations for lendings")
+	}
+
+	if len(lendingAfterSelectHooks) != 0 {
+		for _, obj := range resultSlice {
+			if err := obj.doAfterSelectHooks(ctx, e); err != nil {
+				return err
+			}
+		}
+	}
+	if singular {
+		object.R.Lendings = resultSlice
+		for _, foreign := range resultSlice {
+			if foreign.R == nil {
+				foreign.R = &lendingR{}
+			}
+			foreign.R.Book = object
+		}
+		return nil
+	}
+
+	for _, foreign := range resultSlice {
+		for _, local := range slice {
+			if local.ID == foreign.BookID {
+				local.R.Lendings = append(local.R.Lendings, foreign)
+				if foreign.R == nil {
+					foreign.R = &lendingR{}
+				}
+				foreign.R.Book = local
+				break
+			}
+		}
+	}
+
+	return nil
+}
+
 // AddBookAuthors adds the given related objects to the existing relationships
 // of the book, optionally inserting them as new records.
 // Appends related to o.R.BookAuthors.
@@ -585,6 +704,59 @@ func (o *Book) AddBookAuthors(ctx context.Context, exec boil.ContextExecutor, in
 	for _, rel := range related {
 		if rel.R == nil {
 			rel.R = &bookAuthorR{
+				Book: o,
+			}
+		} else {
+			rel.R.Book = o
+		}
+	}
+	return nil
+}
+
+// AddLendings adds the given related objects to the existing relationships
+// of the book, optionally inserting them as new records.
+// Appends related to o.R.Lendings.
+// Sets related.R.Book appropriately.
+func (o *Book) AddLendings(ctx context.Context, exec boil.ContextExecutor, insert bool, related ...*Lending) error {
+	var err error
+	for _, rel := range related {
+		if insert {
+			rel.BookID = o.ID
+			if err = rel.Insert(ctx, exec, boil.Infer()); err != nil {
+				return errors.Wrap(err, "failed to insert into foreign table")
+			}
+		} else {
+			updateQuery := fmt.Sprintf(
+				"UPDATE \"lendings\" SET %s WHERE %s",
+				strmangle.SetParamNames("\"", "\"", 1, []string{"book_id"}),
+				strmangle.WhereClause("\"", "\"", 2, lendingPrimaryKeyColumns),
+			)
+			values := []interface{}{o.ID, rel.ID}
+
+			if boil.DebugMode {
+				fmt.Fprintln(boil.DebugWriter, updateQuery)
+				fmt.Fprintln(boil.DebugWriter, values)
+			}
+
+			if _, err = exec.ExecContext(ctx, updateQuery, values...); err != nil {
+				return errors.Wrap(err, "failed to update foreign table")
+			}
+
+			rel.BookID = o.ID
+		}
+	}
+
+	if o.R == nil {
+		o.R = &bookR{
+			Lendings: related,
+		}
+	} else {
+		o.R.Lendings = append(o.R.Lendings, related...)
+	}
+
+	for _, rel := range related {
+		if rel.R == nil {
+			rel.R = &lendingR{
 				Book: o,
 			}
 		} else {

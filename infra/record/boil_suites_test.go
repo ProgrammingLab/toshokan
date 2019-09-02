@@ -15,66 +15,77 @@ func TestParent(t *testing.T) {
 	t.Run("Authors", testAuthors)
 	t.Run("BookAuthors", testBookAuthors)
 	t.Run("Books", testBooks)
+	t.Run("Lendings", testLendings)
 }
 
 func TestDelete(t *testing.T) {
 	t.Run("Authors", testAuthorsDelete)
 	t.Run("BookAuthors", testBookAuthorsDelete)
 	t.Run("Books", testBooksDelete)
+	t.Run("Lendings", testLendingsDelete)
 }
 
 func TestQueryDeleteAll(t *testing.T) {
 	t.Run("Authors", testAuthorsQueryDeleteAll)
 	t.Run("BookAuthors", testBookAuthorsQueryDeleteAll)
 	t.Run("Books", testBooksQueryDeleteAll)
+	t.Run("Lendings", testLendingsQueryDeleteAll)
 }
 
 func TestSliceDeleteAll(t *testing.T) {
 	t.Run("Authors", testAuthorsSliceDeleteAll)
 	t.Run("BookAuthors", testBookAuthorsSliceDeleteAll)
 	t.Run("Books", testBooksSliceDeleteAll)
+	t.Run("Lendings", testLendingsSliceDeleteAll)
 }
 
 func TestExists(t *testing.T) {
 	t.Run("Authors", testAuthorsExists)
 	t.Run("BookAuthors", testBookAuthorsExists)
 	t.Run("Books", testBooksExists)
+	t.Run("Lendings", testLendingsExists)
 }
 
 func TestFind(t *testing.T) {
 	t.Run("Authors", testAuthorsFind)
 	t.Run("BookAuthors", testBookAuthorsFind)
 	t.Run("Books", testBooksFind)
+	t.Run("Lendings", testLendingsFind)
 }
 
 func TestBind(t *testing.T) {
 	t.Run("Authors", testAuthorsBind)
 	t.Run("BookAuthors", testBookAuthorsBind)
 	t.Run("Books", testBooksBind)
+	t.Run("Lendings", testLendingsBind)
 }
 
 func TestOne(t *testing.T) {
 	t.Run("Authors", testAuthorsOne)
 	t.Run("BookAuthors", testBookAuthorsOne)
 	t.Run("Books", testBooksOne)
+	t.Run("Lendings", testLendingsOne)
 }
 
 func TestAll(t *testing.T) {
 	t.Run("Authors", testAuthorsAll)
 	t.Run("BookAuthors", testBookAuthorsAll)
 	t.Run("Books", testBooksAll)
+	t.Run("Lendings", testLendingsAll)
 }
 
 func TestCount(t *testing.T) {
 	t.Run("Authors", testAuthorsCount)
 	t.Run("BookAuthors", testBookAuthorsCount)
 	t.Run("Books", testBooksCount)
+	t.Run("Lendings", testLendingsCount)
 }
 
 func TestHooks(t *testing.T) {
 	t.Run("Authors", testAuthorsHooks)
 	t.Run("BookAuthors", testBookAuthorsHooks)
 	t.Run("Books", testBooksHooks)
+	t.Run("Lendings", testLendingsHooks)
 }
 
 func TestInsert(t *testing.T) {
@@ -84,6 +95,8 @@ func TestInsert(t *testing.T) {
 	t.Run("BookAuthors", testBookAuthorsInsertWhitelist)
 	t.Run("Books", testBooksInsert)
 	t.Run("Books", testBooksInsertWhitelist)
+	t.Run("Lendings", testLendingsInsert)
+	t.Run("Lendings", testLendingsInsertWhitelist)
 }
 
 // TestToOne tests cannot be run in parallel
@@ -91,6 +104,7 @@ func TestInsert(t *testing.T) {
 func TestToOne(t *testing.T) {
 	t.Run("BookAuthorToBookUsingBook", testBookAuthorToOneBookUsingBook)
 	t.Run("BookAuthorToAuthorUsingAuthor", testBookAuthorToOneAuthorUsingAuthor)
+	t.Run("LendingToBookUsingBook", testLendingToOneBookUsingBook)
 }
 
 // TestOneToOne tests cannot be run in parallel
@@ -102,6 +116,7 @@ func TestOneToOne(t *testing.T) {}
 func TestToMany(t *testing.T) {
 	t.Run("AuthorToBookAuthors", testAuthorToManyBookAuthors)
 	t.Run("BookToBookAuthors", testBookToManyBookAuthors)
+	t.Run("BookToLendings", testBookToManyLendings)
 }
 
 // TestToOneSet tests cannot be run in parallel
@@ -109,6 +124,7 @@ func TestToMany(t *testing.T) {
 func TestToOneSet(t *testing.T) {
 	t.Run("BookAuthorToBookUsingBookAuthors", testBookAuthorToOneSetOpBookUsingBook)
 	t.Run("BookAuthorToAuthorUsingBookAuthors", testBookAuthorToOneSetOpAuthorUsingAuthor)
+	t.Run("LendingToBookUsingLendings", testLendingToOneSetOpBookUsingBook)
 }
 
 // TestToOneRemove tests cannot be run in parallel
@@ -128,6 +144,7 @@ func TestOneToOneRemove(t *testing.T) {}
 func TestToManyAdd(t *testing.T) {
 	t.Run("AuthorToBookAuthors", testAuthorToManyAddOpBookAuthors)
 	t.Run("BookToBookAuthors", testBookToManyAddOpBookAuthors)
+	t.Run("BookToLendings", testBookToManyAddOpLendings)
 }
 
 // TestToManySet tests cannot be run in parallel
@@ -142,28 +159,33 @@ func TestReload(t *testing.T) {
 	t.Run("Authors", testAuthorsReload)
 	t.Run("BookAuthors", testBookAuthorsReload)
 	t.Run("Books", testBooksReload)
+	t.Run("Lendings", testLendingsReload)
 }
 
 func TestReloadAll(t *testing.T) {
 	t.Run("Authors", testAuthorsReloadAll)
 	t.Run("BookAuthors", testBookAuthorsReloadAll)
 	t.Run("Books", testBooksReloadAll)
+	t.Run("Lendings", testLendingsReloadAll)
 }
 
 func TestSelect(t *testing.T) {
 	t.Run("Authors", testAuthorsSelect)
 	t.Run("BookAuthors", testBookAuthorsSelect)
 	t.Run("Books", testBooksSelect)
+	t.Run("Lendings", testLendingsSelect)
 }
 
 func TestUpdate(t *testing.T) {
 	t.Run("Authors", testAuthorsUpdate)
 	t.Run("BookAuthors", testBookAuthorsUpdate)
 	t.Run("Books", testBooksUpdate)
+	t.Run("Lendings", testLendingsUpdate)
 }
 
 func TestSliceUpdateAll(t *testing.T) {
 	t.Run("Authors", testAuthorsSliceUpdateAll)
 	t.Run("BookAuthors", testBookAuthorsSliceUpdateAll)
 	t.Run("Books", testBooksSliceUpdateAll)
+	t.Run("Lendings", testLendingsSliceUpdateAll)
 }

@@ -6,6 +6,7 @@ create_table :lendings, force: :cascade do |t|
 
     t.index [:book_id]
     t.index [:lent_at]
+    t.index [:returned_at]
 end
 
 add_foreign_key :lendings, :books, column: :book_id

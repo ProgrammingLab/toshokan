@@ -11,4 +11,6 @@ func TestUpsert(t *testing.T) {
 	t.Run("BookAuthors", testBookAuthorsUpsert)
 
 	t.Run("Books", testBooksUpsert)
+
+	t.Run("Lendings", testLendingsUpsert)
 }

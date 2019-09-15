@@ -1,3 +1,4 @@
 require 'book.schema'
 require 'author.schema'
 require 'book_author.schema'
+require 'lendings.schema'

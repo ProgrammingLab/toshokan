@@ -1,0 +1,30 @@
+language: go
+
+go:
+  - "1.13.3"
+
+services:
+  - docker
+
+env:
+  - GO111MODULE=on
+
+install:
+  - sudo apt-get remove postgresql-* -y
+  - sudo -E apt-get -yq --no-install-suggests --no-install-recommends $(travis_apt_get_options) install postgresql-client-11
+
+before_script:
+  - cp sqlboiler.toml.ci sqlboiler.toml
+  - cp .env.ci .env
+  - docker-compose up -d pg
+  - sleep 10
+  - scripts/setup-db -y
+  - scripts/setup-test-db -y
+
+script:
+  - go test -v -race ./...
+
+notifications:
+  email:
+    on_success: never
+    on_failure: always

@@ -19,5 +19,5 @@ require (
 	github.com/volatiletech/sqlboiler v3.5.0+incompatible
 	golang.org/x/sys v0.0.0-20191029155521-f43be2a4598c // indirect
 	google.golang.org/genproto v0.0.0-20190819201941-24fa4b261c55
-	google.golang.org/grpc v1.23.0
+	google.golang.org/grpc v1.28.0
 )
